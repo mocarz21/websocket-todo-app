@@ -1,0 +1,14 @@
+
+.option{
+    background-color: black;
+    border-radius: 20px;
+    margin: 1%;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    h1{
+
+    }
+}
