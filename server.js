@@ -28,6 +28,7 @@ io.on('connection', (socket) => {
         toDoList= message;
         console.log(toDoList)
         console.log('jest')
+        socket.broadcast.emit('message',message)
       });
 })
 

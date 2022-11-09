@@ -2,12 +2,13 @@ import './App.css';
 import io from 'socket.io-client';
 import Option from './components/views/Option'
 import Button from './components/common/Button'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAsync } from "react-async"
 const socket = io('localhost:8000');
 
 
 function App() {
+  const [update, setUpdate] = useState(true)
 
   const [task, setTask] =useState(
     [
@@ -19,26 +20,44 @@ function App() {
           id: 2,
           name: 'go out with dog'
       }
-  ]
+    ]
   )
+
+ useEffect(()=>{
+    socket.emit('message',(task))
+  },[update])
+
+
+
+  socket.on('message',(message) => setTask(message));
   const [textTask, setTextTask] = useState('')
 
 
-  socket.on('conection',()=>{
-    socket.emit('message',(task))
-  });
+  // socket.on('conection',()=>{
+  //   socket.emit('message',(task))
+  // });
 
   const removeTask = (id) => {
 
     setTask(task.filter(tas=>tas.id !== id))
-    socket.emit('message',(task));
+    //socket.emit('message',(task));
+    if(update === true){
+      setUpdate(false)
+    }else{
+      setUpdate(true)
+    }
     
   }
 
   const  addTask =  (textTask) =>{
     
     setTask([...task, {id: task.length + 1, name: textTask }]);
-    socket.emit('message',(task));
+      if(update === true){
+        setUpdate(false)
+      }else{
+        setUpdate(true)
+      }
+    //socket.emit('message',(task));
   }
   
   console.log(textTask)
